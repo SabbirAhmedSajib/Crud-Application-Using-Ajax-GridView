@@ -1,0 +1,140 @@
+﻿@model Crud_Application_Using_Ajax_GridView.Models.Person_details
+
+@{
+    ViewBag.Title = "Person Information List";
+}
+
+<h2>Person CRUD Operation</h2>
+<a class="btn btn-default" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("ADDorEDIT","Details")')">Create New</a>
+<table class="table table-responsive table-striped" id="Table_id" style="width:100%">
+    <thead>
+        <tr class="bg-success">
+            <th>Id</th>
+            <th>First_Name</th>
+            <th>Middle_Name</th>
+            <th>Last_Name</th>
+            <th>Mobile_number</th>
+            <th>Email_Address</th>
+            <th>Gender</th>
+            <th>Permanent_Address</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+
+
+<link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+
+
+
+    <script>
+        var Popup, dataTable;
+
+        $(document).ready(function () {
+            dataTable = $("#Table_id").DataTable({
+                "ajax": {
+                    "type": "Get",
+                    "url": "/Details/GetDataSet",
+                    "data": "JSON"
+                },
+                "columns": [
+                    { "data": "Id" },
+                    { "data": "First_Name" },
+                    { "data": "Middle_Name" },
+                    { "data": "Last_Name" },
+                    { "data": "Mobile_number" },
+                    { "data": "Email_Address" },
+                    { "data": "Gender" },
+                    { "data": "Permanent_Address" },
+                    {
+                        "data": "Id" ,
+                      "render": function (data) {
+
+                          return "<a class='btn btn-success btn-sm' onclick=PopupForm('@Url.Action("ADDorEDIT", "Details")/" + data + "')> Edit</a > <a class='btn btn-danger btn-sm' style='margin-left:5px'  onclick=Delete(" + data + ") > Delete</a > ";
+                        },
+
+                    "orderable": false,
+                    "searchable": false,
+                    "width" : "150px"
+                    }
+                ],
+                "language": {
+                    "emptyTable": "No data found, Please Click on <b> Create New <b> Button"
+                }
+            });
+        });
+
+
+        function PopupForm(url) {
+            var formDiv = $("<div/>");
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+
+                    Popup = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        title: "Fill Personal Information",
+                        height: 400,
+                        width: 850,
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                        }
+
+                    });
+                });
+
+        }
+
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            Popup.dialog('close');
+                            dataTable.ajax.reload();
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+
+
+        function Delete(id) {
+            if (confirm('Are you sure to Delete this record ?')) {
+
+                $.ajax({
+
+                    type: "POST",
+                    url: '@Url.Action("Delete", "Details")/' + id,
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+
+                });
+            }
+        }
+    </script>
+}

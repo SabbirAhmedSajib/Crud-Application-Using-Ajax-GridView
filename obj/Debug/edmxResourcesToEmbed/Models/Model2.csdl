@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Person_InformationModel1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Gender_Information">
+    <Key>
+      <PropertyRef Name="G_Id" />
+    </Key>
+    <Property Name="G_Id" Type="Int32" Nullable="false" />
+    <Property Name="Gender" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="Person_InformationEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Gender_Information" EntityType="Self.Gender_Information" />
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Person_InformationModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Person_Information.dbo.Gender_detail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Gender_detail">
+    <Key>
+      <PropertyRef Name="Gender_Id" />
+      <PropertyRef Name="Info" />
+    </Key>
+    <Property Name="Gender_Id" Type="int" Nullable="false" />
+    <Property Name="Info" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Person_details">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="First_Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Middle_Name" Type="varchar" MaxLength="50" />
+    <Property Name="Last_Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Mobile_number" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Email_Address" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Gender_Id" Type="int" Nullable="false" />
+    <Property Name="Permanent_Address" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="Person_InformationModelStoreContainer">
+    <EntitySet Name="Person_details" EntityType="Self.Person_details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Gender_detail" EntityType="Self.Gender_detail" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Gender_detail].[Gender_Id] AS [Gender_Id], 
+    [Gender_detail].[Info] AS [Info]
+    FROM [dbo].[Gender_detail] AS [Gender_detail]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>
